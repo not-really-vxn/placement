@@ -5,13 +5,6 @@
 <link rel="icon" type="x-icon" href="icon.png">
 <link rel="shortcut icon" type="x-icon" href="icon.png">
 <meta charset="utf-8">
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
-  (adsbygoogle = window.adsbygoogle || []).push({
-    google_ad_client: "ca-pub-6511426299019766",
-    enable_page_level_ads: true
-  });
-</script>
 </head>
 <body>
 <script type="application/javascript"
@@ -29,39 +22,27 @@
 <button class="small_button" onclick="prev_question()" id="back_button">Back</button>
 <button class="small_button_off" id="back_button_off">Back</button><br>
 
-<!-- Website visit statistics - no personal information is collected! -->
-<script type="text/javascript">
-var sc_project=11325211;
-var sc_invisible=1;
-var sc_security="fd9f0659";
-var scJsHost = (("https:" == document.location.protocol) ?
-"https://secure." : "http://www.");
-document.write("<sc"+"ript type='text/javascript' src='" +
-scJsHost+
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<noscript><div class="statcounter"><a title="web stats"
-href="http://statcounter.com/" target="_blank"><img
-class="statcounter"
-src="//c.statcounter.com/11325211/0/fd9f0659/1/" alt="web
-stats"></a></div></noscript>
-
 <!-- JavaScript for the test itself -->
 <script>
-    var max_econ, max_dipl, max_govt, max_scty; // Max possible scores
-    max_econ = max_dipl = max_govt = max_scty = 0;
-    let econ_array = new Array(questions.length);
-    let dipl_array = new Array(questions.length);
-    let govt_array = new Array(questions.length);
-    let scty_array = new Array(questions.length);
+    const labelsSC = Object.keys(questions[0]["effect"]);
+
+    // инициализируем хеши - в первом, максимально возможное кол-во баллов за каждую
+    // категорию, во втором - энумерация баллов, полученных в пользу каждой категории
+    // за каждый вопрос
+    var maxSC = {};
+    var arraysSC = {};
+
+    labelsSC.forEach(function(labelSC) {
+        arraysSC[labelSC] = new Array(questions.length);
+        maxSC[labelSC] = 0;
+
+        for (let i = 0; i < questions.length; i++)
+            maxSC[labelSC] += Math.abs(questions[i]["effect"][labelSC]);
+    });
+
     var qn = 0; // Question number
     init_question();
-    for (var i = 0; i < questions.length; i++) {
-        max_econ += Math.abs(questions[i].effect.econ)
-        max_dipl += Math.abs(questions[i].effect.dipl)
-        max_govt += Math.abs(questions[i].effect.govt)
-        max_scty += Math.abs(questions[i].effect.scty)
-    }
+
     function init_question() {
         document.getElementById("question-text").innerHTML = questions[qn].question;
         document.getElementById("question-number").innerHTML = "Question " + (qn + 1) + " of " + (questions.length);
@@ -76,11 +57,12 @@ stats"></a></div></noscript>
     }
 
     function next_question(mult) {
-        econ_array[qn] = mult*questions[qn].effect.econ
-        dipl_array[qn] = mult*questions[qn].effect.dipl
-        govt_array[qn] = mult*questions[qn].effect.govt
-        scty_array[qn] = mult*questions[qn].effect.scty
+        labelsSC.forEach(function(labelSC) {
+            arraysSC[labelSC][qn] = mult * questions[qn]["effect"][labelSC];
+        });
+
         qn++;
+
         if (qn < questions.length) {
             init_question();
         } else {
@@ -101,15 +83,19 @@ stats"></a></div></noscript>
     }
 
     function results() {
-        let final_econ = econ_array.reduce((a, b) => a + b, 0)
-        let final_dipl = dipl_array.reduce((a, b) => a + b, 0)
-        let final_govt = govt_array.reduce((a, b) => a + b, 0)
-        let final_scty = scty_array.reduce((a, b) => a + b, 0)
-        location.href = `results.html`
-            + `?e=${calc_score(final_econ,max_econ)}`
-            + `&d=${calc_score(final_dipl,max_dipl)}`
-            + `&g=${calc_score(final_govt,max_govt)}`
-            + `&s=${calc_score(final_scty,max_scty)}`
+        // считаем сумму всех баллов за все категории на все отвеченные вопросы
+        // в один массив
+        let finalSC = maxSC;
+
+        labelsSC.forEach(function(labelSC) {
+            // считаем сумму
+            finalSC[labelSC] = arraysSC[labelSC].reduce((a, b) => a + b, 0);
+            // сразу после этого подсчитываем процент
+            finalSC[labelSC] = calc_score(finalSC[labelSC], maxSC[labelSC]);
+        });
+
+        // TODO
+        window.alert(JSON.stringify(finalSC));
     }
 </script>
 </body>
