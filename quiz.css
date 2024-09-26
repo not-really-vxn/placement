@@ -119,6 +119,10 @@ body > .center > *:last-child, .block > div:last-child {
 	background: #BB5078;
 }
 
+.buttons > .continue {
+	background: #7C9EB2;
+}
+
 .back {
 	display: flex;
 

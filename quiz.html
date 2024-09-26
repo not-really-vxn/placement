@@ -59,6 +59,12 @@
                     <div id="results-name">####</div>
                 </div>
 
+                <div class="buttons">
+                    <button class="continue" onclick="javascript:open_application()">
+                        Оставить заявку
+                    </button>
+                </div>
+
                 <div id="results-tale">####</div>
             </div>
 
@@ -161,6 +167,10 @@
                     window.alert("Произошла ошибка, повторите попытку позже - " + message.toString());
                     window.location.reload();
                 });
+            }
+
+            function open_application() {
+                window.location.href = window.atob("aHR0cHM6Ly9zaG9ydHVybC5hdC9qZ2U4WA==");
             }
 
             function results() {
