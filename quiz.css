@@ -54,6 +54,12 @@ body > .center > *:last-child, .block > div:last-child {
 	width: 480px;
 }
 
+@media(max-width: 768px) {
+	.block {
+		width: 85%;
+	}
+}
+
 .block:last-child {
 	background: black;
 }
@@ -139,6 +145,12 @@ body > .center > *:last-child, .block > div:last-child {
 
 #results #results-image {
 	width: 480px;
+}
+
+@media(max-width: 768px) {
+	#results #results-image {
+		width: 85%;
+	}
 }
 
 #results .results-job {
