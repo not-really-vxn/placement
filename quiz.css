@@ -133,4 +133,28 @@ body > .center > *:last-child, .block > div:last-child {
 	display: none;
 }
 
+#results #results-image {
+	width: 480px;
+}
 
+#results .results-job {
+	text-align: left;
+}
+
+#results .results-job > div {
+	margin-top: 6pt;
+}
+
+#results .results-job > #results-pre {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#results .results-job > #results-name {
+	font-size: 28px;
+}
+
+#results #results-tale {
+	text-align: left;
+	font-size: 16px;
+}

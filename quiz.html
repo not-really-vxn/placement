@@ -4,7 +4,9 @@
         <link href="quiz.css" rel="stylesheet" type="text/css">
 
         <title>Placement Test</title>
+
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <script src="questions.js"></script>
     </head>
@@ -15,7 +17,7 @@
                 <img src="medved.webp" />
             </div>
 
-            <div class="block">
+            <div class="block" id="control">
                 <div class="question">
                     <div id="question-number">####</div>
                     <div id="question-text"></div>
@@ -49,6 +51,14 @@
             </div>
 
             <div class="block" id="results">
+                <img id="results-image" src="value_images/adm.webp" />
+
+                <div class="results-job">
+                    <div id="results-pre">На <span id="results-percent">##</span>% Вы подходите в команду</div>
+                    <div id="results-name">####</div>
+                </div>
+
+                <div id="results-tale">####</div>
             </div>
 
             <div class="block">
@@ -126,6 +136,30 @@
                 return [ label, maximum ];
             }
 
+            function showResults(finalSC) {
+                let finalLabel = finalSC[0];
+                let finalScore = finalSC[1];
+
+                // считаем процент матчинга
+                let finalPercent = Math.floor(finalScore / maxSC[finalLabel]) * 100;
+            
+                document.getElementById("results").style.display = "block";
+                document.getElementById("control").style.display = "none";
+
+                document.getElementById("results-image").src = "value_images/" + finalLabel + ".webp";
+                document.getElementById("results-percent").innerText = finalPercent;
+
+                window.fetch("translations.json").then(function(response) {
+                    response.json().then(function(translations) {
+                        document.getElementById("results-name").innerText = translations[finalLabel]["name"];
+                        document.getElementById("results-tale").innerText = translations[finalLabel]["tale"];
+                    });
+                }).catch(function(message) {
+                    window.alert("Произошла ошибка, повторите попытку позже - " + message.toString());
+                    window.location.reload();
+                });
+            }
+
             function results() {
                 // считаем сумму всех баллов за все категории на все отвеченные вопросы
                 // в один массив
@@ -136,8 +170,7 @@
                     finalSC[labelSC] = arraysSC[labelSC].reduce((a, b) => a + b, 0);
                 });
 
-                // TODO
-                window.alert(JSON.stringify(determineLargestSC(finalSC)));
+                showResults(determineLargestSC(finalSC));
             }
         </script>
     </body>
