@@ -1,111 +1,144 @@
-<head>
-<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
-<link href='style.css' rel='stylesheet' type='text/css'>
-<title>8values Quiz</title>
-<link rel="icon" type="x-icon" href="icon.png">
-<link rel="shortcut icon" type="x-icon" href="icon.png">
-<meta charset="utf-8">
-</head>
-<body>
-<script type="application/javascript"
-        src="questions.js">
-</script>
-<h1>8values</h1>
-<hr>
-<h2 style="text-align:center;" id="question-number">Loading...</h2>
-<p class="question" id="question-text"></p>
-<button class="button stronglyAgree" onclick="next_question( 1.0)">Strongly Agree</button> <br>
-<button class="button agree" onclick="next_question( 0.5)">Agree</button> <br>
-<button class="button neutral" onclick="next_question( 0.0)">Neutral/Unsure</button> <br>
-<button class="button disagree" onclick="next_question(-0.5)">Disagree</button> <br>
-<button class="button stronglyDisagree" onclick="next_question(-1.0)">Strongly Disagree</button> <br>
-<button class="small_button" onclick="prev_question()" id="back_button">Back</button>
-<button class="small_button_off" id="back_button_off">Back</button><br>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:400,700" rel="stylesheet">
+        <link href="quiz.css" rel="stylesheet" type="text/css">
 
-<!-- JavaScript for the test itself -->
-<script>
-    const labelsSC = Object.keys(questions[0]["effect"]);
+        <title>Placement Test</title>
+        <meta charset="utf-8">
 
-    // инициализируем хеши - в первом, максимально возможное кол-во баллов за каждую
-    // категорию, во втором - энумерация баллов, полученных в пользу каждой категории
-    // за каждый вопрос
-    var maxSC = {};
-    var arraysSC = {};
+        <script src="questions.js"></script>
+    </head>
 
-    labelsSC.forEach(function(labelSC) {
-        arraysSC[labelSC] = new Array(questions.length);
-        maxSC[labelSC] = 0;
+    <body>
+        <div class="center">
+            <div class="logo">
+                <img src="medved.webp" />
+            </div>
 
-        for (let i = 0; i < questions.length; i++)
-            maxSC[labelSC] += Math.abs(questions[i]["effect"][labelSC]);
-    });
+            <div class="block">
+                <div class="question">
+                    <div id="question-number">####</div>
+                    <div id="question-text"></div>
+                </div>
 
-    window.alert(JSON.stringify(maxSC));
+                <div class="buttons">
+                    <button class="strongly-agree" onclick="javascript:next_question(1.0);">
+                        Полностью согласен
+                    </button>
 
-    var qn = 0; // Question number
-    init_question();
+                    <button class="agree" onclick="javascript:next_question(0.5);">
+                        Согласен
+                    </button>
 
-    function init_question() {
-        document.getElementById("question-text").innerHTML = questions[qn].question;
-        document.getElementById("question-number").innerHTML = "Question " + (qn + 1) + " of " + (questions.length);
-        if (qn == 0) {
-            document.getElementById("back_button").style.display = 'none';
-            document.getElementById("back_button_off").style.display = 'block';
-        } else {
-            document.getElementById("back_button").style.display = 'block';
-            document.getElementById("back_button_off").style.display = 'none';
-        }
+                    <button class="neutral" onclick="javascript:next_question(0);">
+                        Не уверен
+                    </button>
 
-    }
+                    <button class="disagree" onclick="javascript:next_question(-0.5);">
+                        Не согласен
+                    </button>
 
-    function next_question(mult) {
-        labelsSC.forEach(function(labelSC) {
-            arraysSC[labelSC][qn] = mult * questions[qn]["effect"][labelSC];
-        });
+                    <button class="strongly-disagree" onclick="javascript:next_question(-1.0);">
+                        Полностью не согласен
+                    </button>
+                </div>
 
-        qn++;
+                <div class="back" id="back_button">
+                     <button class="small_button" onclick="prev_question()">Назад</button>
+                </div>
+            </div>
 
-        if (qn < questions.length) {
+            <div class="block" id="results">
+            </div>
+
+            <div class="block">
+                &copy; RussInnovation 2024
+            </div>
+        </div>
+    
+        <!-- JavaScript for the test itself -->
+        <script>
+            const labelsSC = Object.keys(questions[0]["effect"]);
+
+            // инициализируем хеши - в первом, максимально возможное кол-во баллов за каждую
+            // категорию, во втором - энумерация баллов, полученных в пользу каждой категории
+            // за каждый вопрос
+            var maxSC = {};
+            var arraysSC = {};
+
+            labelsSC.forEach(function(labelSC) {
+                arraysSC[labelSC] = new Array(questions.length);
+                maxSC[labelSC] = 0;
+
+                for (let i = 0; i < questions.length; i++)
+                    maxSC[labelSC] += Math.abs(questions[i]["effect"][labelSC]);
+            });
+
+            //window.alert(JSON.stringify(maxSC));
+
+            var qn = 0; // Question number
             init_question();
-        } else {
-            results();
-        }
-    }
 
-    function prev_question() {
-        if (qn == 0) {
-            return;
-        }
-        qn--;
-        init_question();
-    }
+            function init_question() {
+                document.getElementById("question-text").innerHTML = questions[qn].question;
+                document.getElementById("question-number").innerHTML = "Вопрос " + (qn + 1) + " из " + (questions.length) + '.';
+                if (qn == 0) {
+                    document.getElementById("back_button").style.display = 'none';
+                } else {
+                    document.getElementById("back_button").style.display = 'block';
+                }
 
-    function determineLargestSC(finalSC) {
-        let maximum = -9999;
-        let label = null;
-
-        labelsSC.forEach(function(labelSC) {
-            if (finalSC[labelSC] >= maximum) {
-                label = labelSC;
-                maximum = finalSC[labelSC];
             }
-        });
 
-        return [ label, maximum ];
-    }
+            function next_question(mult) {
+                labelsSC.forEach(function(labelSC) {
+                    arraysSC[labelSC][qn] = mult * questions[qn]["effect"][labelSC];
+                });
 
-    function results() {
-        // считаем сумму всех баллов за все категории на все отвеченные вопросы
-        // в один массив
-        let finalSC = maxSC;
+                qn++;
 
-        labelsSC.forEach(function(labelSC) {
-            // считаем сумму
-            finalSC[labelSC] = arraysSC[labelSC].reduce((a, b) => a + b, 0);
-        });
+                if (qn < questions.length) {
+                    init_question();
+                } else {
+                    results();
+                }
+            }
 
-        // TODO
-        window.alert(JSON.stringify(determineLargestSC(finalSC)));
-    }
-</script>
-</body>
+            function prev_question() {
+                if (qn == 0) {
+                    return;
+                }
+                qn--;
+                init_question();
+            }
+
+            function determineLargestSC(finalSC) {
+                let maximum = -9999;
+                let label = null;
+    
+                labelsSC.forEach(function(labelSC) {
+                    if (finalSC[labelSC] >= maximum) {
+                        label = labelSC;
+                        maximum = finalSC[labelSC];
+                    }
+                });
+
+                return [ label, maximum ];
+            }
+
+            function results() {
+                // считаем сумму всех баллов за все категории на все отвеченные вопросы
+                // в один массив
+                let finalSC = maxSC;
+
+                labelsSC.forEach(function(labelSC) {
+                    // считаем сумму
+                    finalSC[labelSC] = arraysSC[labelSC].reduce((a, b) => a + b, 0);
+                });
+
+                // TODO
+                window.alert(JSON.stringify(determineLargestSC(finalSC)));
+            }
+        </script>
+    </body>
+</html>

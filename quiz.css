@@ -1,0 +1,136 @@
+body {
+	margin: 0;
+	padding: 0;
+
+	width: 100vw;
+	height: 100vh;
+
+	background: black;
+	color: white;
+}
+
+.center {
+	display: flex;
+	flex-direction: column;
+
+	align-items: center;
+}
+
+body > .center {
+	margin-top: 16pt;
+}
+
+body > .center > * {
+	margin-bottom: 16pt; 
+}
+
+.block > div {
+	margin-bottom: 8pt;
+}
+
+body > .center > *:last-child, .block > div:last-child {
+	margin-bottom: 0;
+}
+
+.logo > img {
+	width: 96px;
+	height: 96px;
+}
+
+.block {
+	background: #364549;
+	border-radius: 8pt;
+
+	font-family: "Montserrat", sans;
+
+	text-align: center;
+
+	padding: 16pt;
+
+	width: 480px;
+}
+
+.block:last-child {
+	background: black;
+}
+
+.question > div {
+	margin-bottom: 4pt;
+}
+
+.question #question-number {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.question #question-text {
+	font-size: 24px;
+}
+
+.buttons > button {
+	display: block;
+
+	width: 100%;
+
+	font-size: 24px;
+	font-family: "Montserrat", sans;
+
+	color: white;
+
+	border-radius: 6pt;
+	border: none;
+
+	padding: 6pt;
+	margin-bottom: 6pt;
+}
+
+.buttons > button:last-child {
+	margin-bottom: 0;
+}
+
+.buttons > .strongly-agree {
+	background: #289871;
+}
+
+.buttons > .agree {
+	background: #7DB372;
+}
+
+.buttons > .neutral {
+	background: #A5A5A5;
+}
+
+.buttons > .disagree {
+	background: #C67F7F;
+}
+
+.buttons > .strongly-disagree {
+	/* background: #D15378; */
+	background: #BB5078;
+}
+
+.back {
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+}
+
+.back > button {
+	border: none;
+	border-radius: 6pt;
+
+	padding: 8pt;
+
+	background: #4A5F64;
+	color: white;
+
+	font-size: 18px;
+	
+}
+
+#results {
+	display: none;
+}
+
+
