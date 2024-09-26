@@ -40,6 +40,8 @@
             maxSC[labelSC] += Math.abs(questions[i]["effect"][labelSC]);
     });
 
+    window.alert(JSON.stringify(maxSC));
+
     var qn = 0; // Question number
     init_question();
 
@@ -78,8 +80,18 @@
         init_question();
     }
 
-    function calc_score(score,max) {
-        return (100*(max+score)/(2*max)).toFixed(1)
+    function determineLargestSC(finalSC) {
+        let maximum = -9999;
+        let label = null;
+
+        labelsSC.forEach(function(labelSC) {
+            if (finalSC[labelSC] >= maximum) {
+                label = labelSC;
+                maximum = finalSC[labelSC];
+            }
+        });
+
+        return [ label, maximum ];
     }
 
     function results() {
@@ -90,12 +102,10 @@
         labelsSC.forEach(function(labelSC) {
             // считаем сумму
             finalSC[labelSC] = arraysSC[labelSC].reduce((a, b) => a + b, 0);
-            // сразу после этого подсчитываем процент
-            finalSC[labelSC] = calc_score(finalSC[labelSC], maxSC[labelSC]);
         });
 
         // TODO
-        window.alert(JSON.stringify(finalSC));
+        window.alert(JSON.stringify(determineLargestSC(finalSC)));
     }
 </script>
 </body>
